@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Lemming
+  - Stair
+  - End
+  - Raycast
+  - Spawner
+  - Beam
+  - Lemming1
+  - Lemming2
+  - Lemming3
+  - Lemming4
+  - Lemming5
+  - Lemming6
+  - Lemming7
+  - Lemming8
+  - Lemming9
+  - Lemming10
+  - Lemming11
+  - Lemming12
+  - LevelChanger
+  - Multiplayer
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - 
+  - 
+  - Lemming
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0

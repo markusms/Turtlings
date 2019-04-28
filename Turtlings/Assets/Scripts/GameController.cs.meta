@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: d7f8eb6aad2417b408a994684544abb6
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - progressBar: {instanceID: 0}
+  - lemmingExit: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
