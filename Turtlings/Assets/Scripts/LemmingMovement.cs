@@ -122,6 +122,7 @@ public class LemmingMovement : Photon.MonoBehaviour
 
     private void Movement()
     {
+        //raycast different parts of the lemming's body
         slopeHit = gameObject.GetComponent<DrawRays>().DrawRay(testRaySlope.transform.position);
         grounded = gameObject.GetComponent<DrawRays>().DrawRay(testRayGround.transform.position);
         groundedFront = gameObject.GetComponent<DrawRays>().DrawRay(testRayGroundFront.transform.position);
@@ -327,7 +328,6 @@ public class LemmingMovement : Photon.MonoBehaviour
             if (transform.localScale.x < 0)
             {
                 gameObject.GetComponent<DrawRays>().Building(testRayGroundBack.transform.position, 5, "left", currentLevel);
-                //gameObject.GetComponent<DrawRays>().Building(testRayGround.transform.position, 5);
                 if(currentLevel == 4)
                 {
                     gameObject.transform.Translate(-0.06f, 0.04f, 0);
@@ -340,7 +340,6 @@ public class LemmingMovement : Photon.MonoBehaviour
             else
             {
                 gameObject.GetComponent<DrawRays>().Building(testRayGroundBack.transform.position, 5, "right", currentLevel);
-                //gameObject.GetComponent<DrawRays>().Building(testRayGround.transform.position, 5);
                 if (currentLevel == 4)
                 {
                     gameObject.transform.Translate(0.06f, 0.04f, 0);
@@ -386,11 +385,9 @@ public class LemmingMovement : Photon.MonoBehaviour
             groundedBackDig = gameObject.GetComponent<DrawRays>().DrawRay(testRayGroundBackDig.transform.position);
             if (digDepthHit || grounded || groundedTooMuch)
             {
-                //transform.Translate(new Vector3(0, -0.1f, 0));
                 gameObject.GetComponent<DrawRays>().Digging(testRayDigDepth.transform.position, diggingSize);
                 gameObject.GetComponent<DrawRays>().Digging(testRayGround.transform.position, diggingSize);
                 gameObject.GetComponent<DrawRays>().Digging(testRayDigDepthDeep.transform.position, diggingSize);
-                //gameObject.GetComponent<DrawRays>().Digging(new Vector3(transform.position.x, transform.position.y+0.5f, transform.position.z), 12);
                 digged = true;
             }
             if (digDepthHitDeep && !digged)
@@ -457,11 +454,9 @@ public class LemmingMovement : Photon.MonoBehaviour
         while (true)
         {
             gameObject.GetComponent<Rigidbody2D>().gravityScale = 0;
-            //gameObject.transform.localScale *= 0.9975f;
             gameObject.transform.localScale *= 0.9975f;
             gameObject.transform.RotateAround(exit.transform.position, new Vector3(0, 0, -10f), exitRotationSpeed/2f * Time.deltaTime);
             gameObject.transform.Translate(new Vector3(+0.001f, +0.001f, 0));
-            //if (gameObject.transform.localScale.x < 0.05f)
             if (gameObject.transform.localScale.x < 0.0125f)
             {
                 StopCoroutine("LemmingGoesToExit");

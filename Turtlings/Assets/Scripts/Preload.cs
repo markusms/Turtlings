@@ -11,7 +11,12 @@ public class Preload : MonoBehaviour {
     public static int lemmingFunction = 0; //Lemming function used to control lemmings: 0 - nothing, 1 - stop, 2 - stairs, 3 - dig
     public static int lemmingsSavedTotal = 0;
     public static string currentLevel = "level1";
+    public static string name = "";
+    public static string password = "";
+    public static float playTime = 0;
     public static bool noSoundFx = false;
+    public static bool fromMainMenu = false;
+    public static string playerGuid = ""; //8f616943-f24b-47b8-a8c0-34a118108896
     public int func; //show lemmingFunction in inspector
 
     //public static Preload preload = this;

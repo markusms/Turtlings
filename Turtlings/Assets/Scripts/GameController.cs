@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using Proyecto26;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -25,6 +27,8 @@ public class GameController : Photon.MonoBehaviour {
     private GameObject restartButton;
     private GameObject nextLevelButton;
     private GameObject saveButton;
+    private GameObject cloudSaveButton;
+    private GameObject winButton;
     private GameObject menuButton;
     private GameObject buttonStop;
     private GameObject buttonStairs;
@@ -69,6 +73,7 @@ public class GameController : Photon.MonoBehaviour {
     private void InitializeVariables()
     {
         Preload.currentLevel = SceneManager.GetActiveScene().name;
+        Preload.fromMainMenu = false;
         if (Preload.noSoundFx)
             soundFxVolume = 0f;
         else
@@ -94,6 +99,8 @@ public class GameController : Photon.MonoBehaviour {
         restartButton = GameObject.Find("ButtonRestart");
         nextLevelButton = GameObject.Find("ButtonNextLevel");
         saveButton = GameObject.Find("ButtonSave");
+        cloudSaveButton = GameObject.Find("ButtonCloudSave");
+        winButton = GameObject.Find("ButtonWinGame");
         menuButton = GameObject.Find("ButtonMenu");
         buttonStop = GameObject.Find("ButtonStop");
         buttonStairs = GameObject.Find("ButtonStairs");
@@ -110,6 +117,8 @@ public class GameController : Photon.MonoBehaviour {
         nextLevelButton.GetComponent<Button>().onClick.AddListener(() => ButtonClicked("next"));
         buttonPause.GetComponent<Button>().onClick.AddListener(() => Paused());
         saveButton.GetComponent<Button>().onClick.AddListener(() => Saved());
+        cloudSaveButton.GetComponent<Button>().onClick.AddListener(() => CloudSaved());
+        winButton.GetComponent<Button>().onClick.AddListener(() => Win());
         menuButton.GetComponent<Button>().onClick.AddListener(() => MainMenu());
         buttonSpeedUp.GetComponent<Button>().onClick.AddListener(() => SpeedUp());
         buttonStop.GetComponent<Button>().onClick.AddListener(() => LemmingsFunctionClicked(1));
@@ -121,9 +130,11 @@ public class GameController : Photon.MonoBehaviour {
         restartButton.SetActive(false);
         nextLevelButton.SetActive(false);
         saveButton.SetActive(false);
+        cloudSaveButton.SetActive(false);
         menuButton.SetActive(false);
         panelTextFunction.SetActive(false);
         panelTextLoss.SetActive(false);
+        winButton.SetActive(false);
         lossText.text = "";
 
         Time.timeScale = 1;
@@ -159,7 +170,7 @@ public class GameController : Photon.MonoBehaviour {
             Preload.lemmingsSavedTotal += lemmingsExited;
             if (multiplayer)
                 photonView.RPC("SendChangeLevelOverNetwork", PhotonTargets.Others, Preload.lemmingsSavedTotal);
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
         else //reload scene
         {
@@ -243,6 +254,8 @@ public class GameController : Photon.MonoBehaviour {
             lossText.text = "Paused";
             saveButton.SetActive(true);
             menuButton.SetActive(true);
+            cloudSaveButton.SetActive(true);
+            winButton.SetActive(true);
         }
         else
         {
@@ -259,7 +272,9 @@ public class GameController : Photon.MonoBehaviour {
             panelTextLoss.SetActive(false);
             lossText.text = "";
             saveButton.SetActive(false);
+            cloudSaveButton.SetActive(false);
             menuButton.SetActive(false);
+            winButton.SetActive(false);
         }
     }
 
@@ -268,6 +283,33 @@ public class GameController : Photon.MonoBehaviour {
         Preload.Save();
         panelTextLoss.SetActive(true);
         lossText.text = "Saved";
+    }
+
+    private void CloudSaved()
+    {
+        string postUrl = "http://localhost:5000/api/players/" + Preload.playerGuid + "/save";
+        var saveData = new SaveData();
+        saveData.Name = Preload.name;
+        saveData.Password = Preload.password;
+        saveData.LemmingsSavedTotal = Preload.lemmingsSavedTotal;
+        saveData.CurrentLevel = Preload.currentLevel;
+        Preload.playTime += Time.time;
+        saveData.PlayTime = Preload.playTime;
+        var jsonRun = Newtonsoft.Json.JsonConvert.SerializeObject(saveData);
+        RestClient.Post(postUrl, jsonRun, (exception, helper) => SaveCallback(exception, helper));
+        panelTextLoss.SetActive(true);
+        lossText.text = "Saved";
+    }
+
+    private void SaveCallback(RequestException exception, ResponseHelper response)
+    {
+        Debug.Log(response.Text);
+        EditorUtility.DisplayDialog("Status", "Status code: "+ response.StatusCode.ToString(), "Ok");
+    }
+
+    private void Win()
+    {
+        SceneManager.LoadScene("Leaderboard");
     }
 
     private void MainMenu()
